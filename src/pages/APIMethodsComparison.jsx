@@ -187,7 +187,7 @@ export default function APIMethodsComparison() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-8">
+    <div className="min-h-screen bg-black text-white px-4 py-6 sm:px-6 lg:p-8">
       <style>{`
         @keyframes flow {
           0%, 100% { opacity: 0.5; transform: translateX(0); }
@@ -213,15 +213,15 @@ export default function APIMethodsComparison() {
       <div className="max-w-7xl mx-auto">
         {/* Header with enhanced styling */}
         <div className="mb-12 text-center fade-in">
-          <h2 className="text-6xl font-extrabold mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+          <h2 className="text-3xl sm:text-4xl lg:text-6xl font-extrabold mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
             4 Ways to Fetch Data in React
           </h2>
-          <p className="text-slate-400 text-xl font-light">Compare different HTTP request approaches with live examples</p>
+          <p className="text-slate-400 text-base sm:text-lg lg:text-xl font-light">Compare different HTTP request approaches with live examples</p>
           <div className="mt-4 h-1 w-32 mx-auto bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full"></div>
         </div>
 
         {/* Enhanced Method Selector */}
-        <div className="mb-10 flex flex-wrap justify-center gap-4">
+        <div className="mb-10 flex flex-wrap justify-center gap-3 sm:gap-4">
           {[
             { id: "native", label: "Native Fetch", emoji: "🔵", gradient: "from-blue-600 via-blue-500 to-cyan-500", shadow: "shadow-blue-500/50" },
             { id: "axios", label: "Axios", emoji: "🟢", gradient: "from-green-600 via-green-500 to-emerald-500", shadow: "shadow-green-500/50" },
@@ -231,7 +231,7 @@ export default function APIMethodsComparison() {
             <button
               key={method.id}
               onClick={() => setActiveMethod(method.id)}
-              className={`group relative px-6 py-3.5 rounded-xl font-bold transition-all duration-300 text-white text-sm overflow-hidden ${activeMethod === method.id
+              className={`group relative px-4 sm:px-5 md:px-6 py-3.5 rounded-xl font-bold transition-all duration-300 text-white text-sm overflow-hidden ${activeMethod === method.id
                   ? `bg-gradient-to-r ${method.gradient} shadow-xl ${method.shadow} scale-105`
                   : "bg-slate-800/60 backdrop-blur-sm hover:bg-slate-700/70 hover:scale-102 border border-slate-700/50"
                 }`}
@@ -251,7 +251,7 @@ export default function APIMethodsComparison() {
         <div className="space-y-8">
           {/* Enhanced Description Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div className="lg:col-span-2 bg-gradient-to-br from-slate-800/70 via-slate-900/70 to-slate-800/70 backdrop-blur-xl rounded-2xl p-8 border border-slate-700/50 shadow-2xl fade-in">
+            <div className="lg:col-span-2 bg-gradient-to-br from-slate-800/70 via-slate-900/70 to-slate-800/70 backdrop-blur-xl rounded-2xl p-6 sm:p-7 lg:p-8 border border-slate-700/50 shadow-2xl fade-in">
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center text-5xl shadow-lg">
                   {methodDescriptions[activeMethod].emoji}
@@ -284,7 +284,7 @@ export default function APIMethodsComparison() {
           {/* Enhanced Code + Animation Section */}
           <div className="grid grid-cols-1 gap-8">
             {/* Code Section with improved styling */}
-            <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-xl rounded-2xl p-7 border border-slate-700/50 shadow-2xl fade-in">
+            <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-xl rounded-2xl p-6 sm:p-7 border border-slate-700/50 shadow-2xl fade-in">
               <div className="flex items-center gap-2 mb-5">
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center text-white font-bold text-sm">
                   &lt;/&gt;
@@ -381,24 +381,24 @@ const { data, isLoading } = useQuery({
             </div>
 
             {/* Enhanced Animation Section */}
-            <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-xl rounded-2xl p-7 border border-slate-700/50 shadow-2xl fade-in">
+            <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-xl rounded-2xl p-6 sm:p-7 border border-slate-700/50 shadow-2xl fade-in">
               <div className="flex items-center gap-2 mb-5">
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-pink-600 to-purple-600 flex items-center justify-center text-white font-bold text-sm">
                   ⚡
                 </div>
                 <h3 className="text-xl font-bold text-white">Live Visualization</h3>
               </div>
-              <div className="relative w-full bg-gradient-to-br from-slate-950 to-slate-900 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center shadow-inner min-h-[500px]">
+              <div className="relative w-full bg-gradient-to-br from-slate-950 to-slate-900 rounded-xl overflow-hidden border border-slate-800 flex items-center justify-center shadow-inner min-h-[260px] sm:min-h-[340px] md:min-h-[420px] lg:min-h-[500px]">
                 {isAnimating ? (
                   <img
                     key={`${activeMethod}-${animationKey}`}
-                    className="w-full h-auto max-w-none"
+                    className="w-full h-auto max-w-full object-contain"
                     src={animations[activeMethod]}
                     alt={`${activeMethod} animation`}
                   />
                 ) : (
                   <img
-                    className="w-full h-auto max-w-none"
+                    className="w-full h-auto max-w-full object-contain"
                     src={diagrams[activeMethod]}
                     alt={`${activeMethod} diagram`}
                   />
@@ -409,7 +409,7 @@ const { data, isLoading } = useQuery({
 
           {/* Enhanced Cat Image Result */}
           {showResult && catImage && (
-            <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-xl rounded-2xl p-8 border border-slate-700/50 shadow-2xl fade-in">
+            <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-xl rounded-2xl p-6 sm:p-7 lg:p-8 border border-slate-700/50 shadow-2xl fade-in">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-green-600 to-emerald-600 flex items-center justify-center text-white font-bold text-lg">
                   ✓
@@ -422,7 +422,7 @@ const { data, isLoading } = useQuery({
                 <img
                   src={catImage}
                   alt="Cat"
-                  className="w-full max-h-[500px] object-cover"
+                  className="w-full max-h-[360px] sm:max-h-[460px] lg:max-h-[520px] object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 to-transparent pointer-events-none"></div>
               </div>

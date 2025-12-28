@@ -6,25 +6,27 @@ export default function UseHookPage() {
     const [selectedPath, setSelectedPath] = useState("success"); // "success" or "error"
     const timeoutsRef = useRef([]);
 
+    const stepReached = (step) => animationStep >= step;
+    const stepIsCurrent = (step) => animationStep === step;
+
     const startAnimation = (path) => {
         timeoutsRef.current.forEach(clearTimeout);
         timeoutsRef.current = [];
 
         setSelectedPath(path);
         setIsAnimating(true);
-        setAnimationStep(0);
+        setAnimationStep(1);
 
-        const delays = [0, 700, 1400, 2100, 2800, 3500];
+        const delays = [1200, 2400, 3600, 4800, 6000]; // steps 2-6 (slower)
 
         delays.forEach((delay, idx) => {
-            const id = setTimeout(() => setAnimationStep(idx + 1), delay);
+            const id = setTimeout(() => setAnimationStep(idx + 2), delay);
             timeoutsRef.current.push(id);
         });
 
         const endId = setTimeout(() => {
             setIsAnimating(false);
-            setAnimationStep(0);
-        }, 4500);
+        }, 7000);
         timeoutsRef.current.push(endId);
     };
 
@@ -365,13 +367,7 @@ export default function UseHookPage() {
                         </defs>
 
                         {/* Error Boundary */}
-                        <g
-                            className={
-                                (selectedPath === "error" && animationStep >= 5)
-                                    ? "animate-pulse-slow"
-                                    : ""
-                            }
-                        >
+                        <g>
                             <rect
                                 x="180"
                                 y="20"
@@ -380,6 +376,7 @@ export default function UseHookPage() {
                                 rx="12"
                                 fill="#18181b"
                                 stroke={getStrokeColor("error")}
+                                className={stepIsCurrent(4) || stepIsCurrent(5) || stepIsCurrent(6) ? "glow-red" : ""}
                                 strokeWidth="3"
                                 strokeDasharray="10,5"
                             />
@@ -405,7 +402,7 @@ export default function UseHookPage() {
                         </g>
 
                         {/* Suspense */}
-                        <g className={animationStep >= 3 ? "animate-pulse-slow" : ""}>
+                        <g>
                             <rect
                                 x="180"
                                 y="105"
@@ -414,6 +411,7 @@ export default function UseHookPage() {
                                 rx="12"
                                 fill="#18181b"
                                 stroke={getStrokeColor("suspense")}
+                                className={stepIsCurrent(3) ? "glow-indigo" : ""}
                                 strokeWidth="3"
                                 strokeDasharray="10,5"
                             />
@@ -439,14 +437,7 @@ export default function UseHookPage() {
                         </g>
 
                         {/* Component */}
-                        <g
-                            className={
-                                animationStep === 1 ||
-                                    (selectedPath === "success" && animationStep >= 5)
-                                    ? "animate-pulse-slow"
-                                    : ""
-                            }
-                        >
+                        <g>
                             <rect
                                 x="40"
                                 y="190"
@@ -455,6 +446,13 @@ export default function UseHookPage() {
                                 rx="12"
                                 fill="#18181b"
                                 stroke={getStrokeColor("success")}
+                                className={
+                                    stepIsCurrent(1)
+                                        ? "glow-purple"
+                                        : selectedPath === "success" && stepIsCurrent(5)
+                                            ? "glow-green"
+                                            : ""
+                                }
                                 strokeWidth="3.5"
                             />
                             <text
@@ -479,14 +477,7 @@ export default function UseHookPage() {
                         </g>
 
                         {/* use() */}
-                        <g
-                            className={
-                                animationStep === 2 ||
-                                    (selectedPath === "success" && animationStep >= 4)
-                                    ? "animate-pulse-slow"
-                                    : ""
-                            }
-                        >
+                        <g>
                             <rect
                                 x="240"
                                 y="190"
@@ -495,6 +486,13 @@ export default function UseHookPage() {
                                 rx="12"
                                 fill="#18181b"
                                 stroke={getStrokeColor("use")}
+                                className={
+                                    stepIsCurrent(2)
+                                        ? "glow-indigo"
+                                        : selectedPath === "success" && stepIsCurrent(4)
+                                            ? "glow-green"
+                                            : ""
+                                }
                                 strokeWidth="3.5"
                             />
                             <text
@@ -519,15 +517,7 @@ export default function UseHookPage() {
                         </g>
 
                         {/* Promise/Context */}
-                        <g
-                            className={
-                                animationStep === 2 ||
-                                    animationStep === 3 ||
-                                    animationStep === 4
-                                    ? "animate-pulse-slow"
-                                    : ""
-                            }
-                        >
+                        <g>
                             <rect
                                 x="410"
                                 y="190"
@@ -536,6 +526,7 @@ export default function UseHookPage() {
                                 rx="12"
                                 fill="#18181b"
                                 stroke={getStrokeColor("promise")}
+                                className={stepIsCurrent(2) || stepIsCurrent(3) ? "glow-indigo" : ""}
                                 strokeWidth="3.5"
                             />
                             <text
@@ -560,14 +551,7 @@ export default function UseHookPage() {
                         </g>
 
                         {/* Rendered UI / Error UI */}
-                        <g
-                            className={
-                                (selectedPath === "success" && animationStep === 6) ||
-                                    (selectedPath === "error" && animationStep === 6)
-                                    ? "animate-pulse-slow"
-                                    : ""
-                            }
-                        >
+                        <g>
                             <rect
                                 x="200"
                                 y="280"
@@ -576,6 +560,13 @@ export default function UseHookPage() {
                                 rx="12"
                                 fill="#18181b"
                                 stroke={getStrokeColor(selectedPath)}
+                                className={
+                                    stepIsCurrent(6)
+                                        ? selectedPath === "success"
+                                            ? "glow-green"
+                                            : "glow-red"
+                                        : ""
+                                }
                                 strokeWidth="3.5"
                             />
                             <text
@@ -602,79 +593,45 @@ export default function UseHookPage() {
                         {/* ARROWS - COMMON PATH (Steps 1-3) */}
 
                         {/* 1: Component -> use() */}
-                        {animationStep === 1 && (
+                        {stepIsCurrent(1) && (
                             <>
                                 <path
                                     d="M 170 225 Q 205 225 240 225"
-                                    stroke={selectedPath === "success" ? "#a855f7" : selectedPath === "error" ? "#a855f7" : "#6b7280"}
+                                    stroke="#a855f7"
                                     strokeWidth="4"
                                     fill="none"
                                     className="animate-draw-smooth"
-                                    markerEnd={selectedPath === "success" || selectedPath === "error" ? "url(#arrowPurple)" : "url(#arrowMuted)"}
-                                />
-                                <circle
-                                    cx="205"
-                                    cy="225"
-                                    r="5"
-                                    fill={selectedPath === "success" || selectedPath === "error" ? "#a855f7" : "#6b7280"}
-                                    className="animate-pulse-circle"
+                                    markerEnd="url(#arrowPurple)"
                                 />
                             </>
                         )}
 
                         {/* 2: use() -> Promise */}
-                        {animationStep === 2 && (
+                        {stepIsCurrent(2) && (
                             <>
                                 <path
                                     d="M 340 225 Q 375 225 410 225"
-                                    stroke={selectedPath === "success" ? "#818cf8" : selectedPath === "error" ? "#818cf8" : "#6b7280"}
+                                    stroke="#818cf8"
                                     strokeWidth="4"
                                     fill="none"
                                     className="animate-draw-smooth"
-                                    markerEnd={selectedPath === "success" || selectedPath === "error" ? "url(#arrowIndigo)" : "url(#arrowMuted)"}
-                                />
-                                <circle
-                                    cx="375"
-                                    cy="225"
-                                    r="5"
-                                    fill={selectedPath === "success" || selectedPath === "error" ? "#818cf8" : "#6b7280"}
-                                    className="animate-pulse-circle"
+                                    markerEnd="url(#arrowIndigo)"
                                 />
                             </>
                         )}
 
                         {/* 3: Promise -> Suspense */}
-                        {animationStep === 3 && (
+                        {stepIsCurrent(3) && (
                             <>
                                 <path
                                     d="M 495 190 Q 495 160 400 137"
-                                    stroke={selectedPath === "success" ? "#818cf8" : selectedPath === "error" ? "#818cf8" : "#6b7280"}
+                                    stroke="#818cf8"
                                     strokeWidth="4"
                                     fill="none"
                                     className="animate-draw-smooth"
                                     strokeDasharray="8,4"
-                                    markerEnd={selectedPath === "success" || selectedPath === "error" ? "url(#arrowIndigo)" : "url(#arrowMuted)"}
+                                    markerEnd="url(#arrowIndigo)"
                                 />
-                                <circle
-                                    cx="310"
-                                    cy="137"
-                                    r="10"
-                                    fill="none"
-                                    stroke={selectedPath === "success" ? "#fbbf24" : selectedPath === "error" ? "#fbbf24" : "#6b7280"}
-                                    strokeWidth="3"
-                                    className="animate-ping-ring"
-                                />
-                                <text
-                                    x="310"
-                                    y="100"
-                                    textAnchor="middle"
-                                    fill={selectedPath === "success" ? "#fbbf24" : selectedPath === "error" ? "#fbbf24" : "#6b7280"}
-                                    fontSize="12"
-                                    fontWeight="700"
-                                    className="animate-fade-in"
-                                >
-                                    Loading...
-                                </text>
                             </>
                         )}
 
@@ -682,7 +639,7 @@ export default function UseHookPage() {
                         {selectedPath === "success" && (
                             <>
                                 {/* 4: Promise resolves -> use() */}
-                                {animationStep === 4 && (
+                                {stepIsCurrent(4) && (
                                     <>
                                         <path
                                             d="M 410 210 Q 375 210 340 210"
@@ -692,18 +649,11 @@ export default function UseHookPage() {
                                             className="animate-draw-smooth"
                                             markerEnd="url(#arrowGreen)"
                                         />
-                                        <circle
-                                            cx="375"
-                                            cy="210"
-                                            r="5"
-                                            fill="#34d399"
-                                            className="animate-pulse-circle"
-                                        />
                                     </>
                                 )}
 
                                 {/* 5: use() -> Component */}
-                                {animationStep === 5 && (
+                                {stepIsCurrent(5) && (
                                     <>
                                         <path
                                             d="M 240 210 Q 205 210 170 210"
@@ -713,18 +663,11 @@ export default function UseHookPage() {
                                             className="animate-draw-smooth"
                                             markerEnd="url(#arrowGreen)"
                                         />
-                                        <circle
-                                            cx="205"
-                                            cy="210"
-                                            r="5"
-                                            fill="#34d399"
-                                            className="animate-pulse-circle"
-                                        />
                                     </>
                                 )}
 
                                 {/* 6: Component -> Rendered UI */}
-                                {animationStep === 6 && (
+                                {stepIsCurrent(6) && (
                                     <>
                                         <path
                                             d="M 105 260 Q 105 280 200 315"
@@ -733,13 +676,6 @@ export default function UseHookPage() {
                                             fill="none"
                                             className="animate-draw-smooth"
                                             markerEnd="url(#arrowGreen)"
-                                        />
-                                        <circle
-                                            cx="153"
-                                            cy="285"
-                                            r="5"
-                                            fill="#34d399"
-                                            className="animate-pulse-circle"
                                         />
                                     </>
                                 )}
@@ -750,7 +686,7 @@ export default function UseHookPage() {
                         {selectedPath === "error" && (
                             <>
                                 {/* 4: Promise rejects -> Error Boundary */}
-                                {animationStep === 4 && (
+                                {stepIsCurrent(4) && (
                                     <>
                                         <path
                                             d="M 495 190 Q 495 120 420 52"
@@ -761,28 +697,12 @@ export default function UseHookPage() {
                                             strokeDasharray="8,4"
                                             markerEnd="url(#arrowRed)"
                                         />
-                                        <circle
-                                            cx="458"
-                                            cy="130"
-                                            r="5"
-                                            fill="#ef4444"
-                                            className="animate-pulse-circle"
-                                        />
                                     </>
                                 )}
 
                                 {/* 5: Error Boundary activation */}
-                                {animationStep === 5 && (
+                                {stepIsCurrent(5) && (
                                     <>
-                                        <circle
-                                            cx="310"
-                                            cy="52"
-                                            r="10"
-                                            fill="none"
-                                            stroke="#ef4444"
-                                            strokeWidth="3"
-                                            className="animate-ping-ring"
-                                        />
                                         <text
                                             x="310"
                                             y="15"
@@ -790,7 +710,6 @@ export default function UseHookPage() {
                                             fill="#ef4444"
                                             fontSize="12"
                                             fontWeight="700"
-                                            className="animate-fade-in"
                                         >
                                             Error caught!
                                         </text>
@@ -798,7 +717,7 @@ export default function UseHookPage() {
                                 )}
 
                                 {/* 6: Error Boundary -> Error UI */}
-                                {animationStep === 6 && (
+                                {stepIsCurrent(6) && (
                                     <>
                                         <path
                                             d="M 310 85 Q 310 180 310 280"
@@ -809,70 +728,9 @@ export default function UseHookPage() {
                                             strokeDasharray="8,4"
                                             markerEnd="url(#arrowRed)"
                                         />
-                                        <circle
-                                            cx="310"
-                                            cy="183"
-                                            r="5"
-                                            fill="#ef4444"
-                                            className="animate-pulse-circle"
-                                        />
                                     </>
                                 )}
                             </>
-                        )}
-
-                        {/* MUTED ARROWS for inactive path */}
-
-                        {/* Muted success path arrows when error is selected */}
-                        {selectedPath === "error" && animationStep >= 4 && (
-                            <g opacity="0.3">
-                                <path
-                                    d="M 410 210 Q 375 210 340 210"
-                                    stroke="#6b7280"
-                                    strokeWidth="3"
-                                    fill="none"
-                                    strokeDasharray="5,5"
-                                    markerEnd="url(#arrowMuted)"
-                                />
-                                <path
-                                    d="M 240 210 Q 205 210 170 210"
-                                    stroke="#6b7280"
-                                    strokeWidth="3"
-                                    fill="none"
-                                    strokeDasharray="5,5"
-                                    markerEnd="url(#arrowMuted)"
-                                />
-                                <path
-                                    d="M 105 260 Q 105 280 200 315"
-                                    stroke="#6b7280"
-                                    strokeWidth="3"
-                                    fill="none"
-                                    strokeDasharray="5,5"
-                                    markerEnd="url(#arrowMuted)"
-                                />
-                            </g>
-                        )}
-
-                        {/* Muted error path arrows when success is selected */}
-                        {selectedPath === "success" && animationStep >= 4 && (
-                            <g opacity="0.3">
-                                <path
-                                    d="M 495 190 Q 495 120 420 52"
-                                    stroke="#6b7280"
-                                    strokeWidth="3"
-                                    fill="none"
-                                    strokeDasharray="5,5"
-                                    markerEnd="url(#arrowMuted)"
-                                />
-                                <path
-                                    d="M 310 85 Q 310 180 310 280"
-                                    stroke="#6b7280"
-                                    strokeWidth="3"
-                                    fill="none"
-                                    strokeDasharray="5,5"
-                                    markerEnd="url(#arrowMuted)"
-                                />
-                            </g>
                         )}
                     </svg>
                 </div>
@@ -1169,6 +1027,18 @@ function ThemedButton({ show, children }) {
         .animate-fade-in {
           animation: fade-in 0.4s ease-out forwards;
         }
+                .glow-green {
+                    filter: drop-shadow(0 0 10px rgba(52, 211, 153, 0.6));
+                }
+                .glow-red {
+                    filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.65));
+                }
+                .glow-indigo {
+                    filter: drop-shadow(0 0 10px rgba(129, 140, 248, 0.6));
+                }
+                .glow-purple {
+                    filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.6));
+                }
       `}</style>
         </div>
     );

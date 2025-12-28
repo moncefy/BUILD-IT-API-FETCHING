@@ -89,11 +89,11 @@ export default function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="min-h-screen flex bg-black text-zinc-100">
-        {/* Sidebar */}
+      <div className="min-h-screen flex flex-col lg:flex-row bg-black text-zinc-100">
+        {/* Sidebar (desktop) */}
         <aside
-          className={`${sidebarCollapsed ? "w-20" : "w-80"
-            } border-r border-zinc-800 flex flex-col transition-all duration-300`}
+          className={`${sidebarCollapsed ? "w-20" : "w-80"}
+            hidden lg:flex border-r border-zinc-800 flex-col transition-all duration-300`}
         >
           {/* Header */}
           <div className="p-6 border-b border-zinc-800">
@@ -237,8 +237,8 @@ export default function App() {
         {/* Main Content */}
         <main className="flex-1 flex flex-col">
           {/* Top Bar */}
-          <header className="border-b border-zinc-800 px-8 py-4 bg-zinc-950/50 backdrop-blur-sm">
-            <div className="flex items-center justify-between">
+          <header className="border-b border-zinc-800 px-4 sm:px-6 lg:px-8 py-4 bg-zinc-950/50 backdrop-blur-sm">
+            <div className="flex items-center justify-between flex-wrap gap-4">
               <div className="flex items-center gap-4">
                 <span className="text-3xl">{activeTab?.icon}</span>
                 <div>
@@ -305,19 +305,37 @@ export default function App() {
                 </div>
               </div>
             </div>
+
+            {/* Mobile tab selector */}
+            <div className="lg:hidden mt-4 overflow-x-auto pb-2 -mx-1 px-1">
+              <div className="flex gap-2 min-w-max">
+                {TABS.map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActive(tab.id)}
+                    className={`px-4 py-2 rounded-full text-sm transition-colors border ${active === tab.id
+                      ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white border-transparent"
+                      : "bg-zinc-900 text-zinc-200 border-zinc-800 hover:border-zinc-700"}`}
+                  >
+                    <span className="mr-1">{tab.icon}</span>
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+            </div>
           </header>
 
           {/* Page Content */}
           <div className="flex-1 overflow-auto">
-            <div className="p-10 animate-fade-in">
+            <div className="p-4 sm:p-6 lg:p-10 animate-fade-in">
               <ActivePage />
             </div>
           </div>
 
           {/* Bottom Navigation */}
-          <footer className="border-t border-zinc-800 px-8 py-4 bg-zinc-950/50 backdrop-blur-sm">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-6 text-sm text-zinc-400">
+          <footer className="border-t border-zinc-800 px-4 sm:px-6 lg:px-8 py-4 bg-zinc-950/50 backdrop-blur-sm">
+            <div className="flex items-center justify-between flex-wrap gap-4">
+              <div className="flex items-center gap-3 sm:gap-6 text-sm text-zinc-400">
                 <span>Team archITects</span>
                 <span>•</span>
                 <span>API Fetching Guide</span>
