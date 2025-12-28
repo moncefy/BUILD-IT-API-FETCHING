@@ -1428,14 +1428,9 @@ This design eliminates misleading comparisons and ensures that observed differen
 
 ### State & Lifecycle Control
 
- State is managed within each module to:
-
-- Keep request lifecycles visible
-- Prevent hidden caching or deduplication
-- Make race conditions and stale data observable
-- Maintain predictable UI transitions
-
-This aligns with the educational goal of exposing internal behavior rather than optimizing it away.
+The application explicitly manages its state to reflect each phase of a network request : idle, loading, success, error, and completion. 
+This makes the full request lifecycle visible to the user instead of abstracting it away. 
+By avoiding hidden caching, automatic deduplication, or silent retries, the app allows race conditions, stale data, and UI transitions to be clearly observed. This design choice supports the educational goal of exposing how data fetching actually behaves in real applications, rather than optimizing those behaviors out of view. 
 
 ---
 
