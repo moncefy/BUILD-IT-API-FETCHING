@@ -43,7 +43,8 @@
   - Polling & refetch intervals
   - Optimistic updates
   - Mutation handling & side effects
-- Implementation part
+- Implementation Details
+- Setup Instructions
 ---
 
 ## Introduction
@@ -1485,7 +1486,7 @@ The result is not a demo, but a **learning instrument**, one that prioritizes un
 
 ---
 
-##  Setup Instructions
+## Setup Instructions
 
 Follow these steps to get the project running locally:
 
